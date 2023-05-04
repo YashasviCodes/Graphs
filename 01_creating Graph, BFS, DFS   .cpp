@@ -113,10 +113,19 @@ int main(){
     cout << "DFS Traversal : ";
     g1.DFS();
     cout << endl;
-
-    // 
-
 }
+
+/*
+Output :- 
+
+1 -> 2 3 4 
+2 -> 1 4 
+3 -> 1 4 
+4 -> 1 2 3 
+BFS Traversal : 1 2 3 4 
+DFS Traversal : 1 2 4 3 
+
+*/
 
 
 
