@@ -1,6 +1,10 @@
 # Graphs :
 
-### 1. Undirected Unweighted Graphs 
+## 1. Undirected Unweighted Graphs 
+![graph](https://user-images.githubusercontent.com/124666305/236156069-f06f3842-5687-44fa-8227-cb3207ca33d1.png)
+
+lets create this above graph from scratch :- 
+
 ```cpp
 #include<iostream>
 #include<unordered_map>
@@ -132,7 +136,127 @@ DFS Traversal : 1 2 4 3
 
 */
 
+```
 
+## 2.Directed Unweighted Graph :- 
+![directed-graph](https://user-images.githubusercontent.com/124666305/236154616-0e6ddd0a-e2c8-4341-9d71-990687baedb7.png)
 
+lets create this above graph from scratch.
+
+```cpp
+// lets create a directed graph 
+#include<iostream>
+#include<list>
+#include<queue>
+#include<map>
+#include<unordered_map>
+using namespace std;
+
+class Graph{
+    public:
+        map<int,list<int>> AdjList;
+
+    void insertEdge(int vertex1, int vertex2){ // this will create v1 --> v2
+        AdjList[vertex1].push_back(vertex2);
+        AdjList[vertex2];
+    }
+
+    void printAdj(){
+        for(auto block:AdjList){
+            int node = block.first;
+            cout << node << " -> ";
+            for(auto neigh:AdjList[node])
+                cout << neigh << " ";
+            cout << endl;
+        }
+    }
+
+    // Breadth First Search
+    void BFSHelper(unordered_map<int,bool> &visited, int src){
+        queue<int> q;
+        q.push(src);
+        visited[src] = true;
+
+        while(!q.empty()){
+            int front = q.front();
+            q.pop();
+            cout << front << " ";
+
+            for(auto neigh:AdjList[front]){
+                if(!visited[neigh]){
+                    q.push(neigh);
+                    visited[neigh] = true;
+                }
+            }
+        }
+    }
+    void BFS(){
+        unordered_map<int,bool> visited;
+        for(auto block:AdjList){
+            int node = block.first;
+            if(!visited[node])  
+                BFSHelper(visited, node);
+        }
+    }
+
+    // Depth First search 
+    void DFSHelper(unordered_map<int,bool> &visited, int src){
+        
+        visited[src] = true;
+        cout << src << " ";
+
+        for(auto neigh:AdjList[src])
+            if(!visited[neigh])
+                DFSHelper(visited, neigh);
+
+    }
+    void DFS(){
+
+        unordered_map<int,bool> visited;
+        for(auto block:AdjList){
+            int node = block.first;
+            if(!visited[node])
+                DFSHelper(visited, node);
+        }
+    }
+};
+
+int main(){
+
+    Graph g;
+    g.insertEdge(2,1);
+    g.insertEdge(2,3);
+    g.insertEdge(4,1);
+    g.insertEdge(3,4);
+    g.insertEdge(2,5);
+    g.insertEdge(5,6);
+    g.insertEdge(7,5);
+
+    // print graph
+    g.printAdj(); 
+
+    cout << "BFS Traversal : ";
+    g.BFS();
+    cout << endl;
+
+    cout << "DFS Traversal : ";
+    g.DFS();
+    cout << endl;
+
+    return 0;
+}
+
+/*
+AdjList :- 
+1 -> 
+2 -> 1 3 5 
+3 -> 4 
+4 -> 1 
+5 -> 6 
+6 -> 
+7 -> 5 
+BFS Traversal : 1 2 3 5 4 6 7
+DFS Traversal : 1 2 3 4 5 6 7
+*/
 
 ```
