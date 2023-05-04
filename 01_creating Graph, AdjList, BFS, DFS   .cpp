@@ -5,6 +5,8 @@
 #include<queue>
 using namespace std;
 
+// Task - let us implement the Graph, then print its AdjList, do its BFS and DFS traversal as well.
+
 class Graph{
     public:
         map<int,list<int>> AdjList;  // for mapping every vertex with its neigh we use this data structure
