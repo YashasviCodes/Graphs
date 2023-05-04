@@ -260,3 +260,157 @@ DFS Traversal : 1 2 3 4 5 6 7
 */
 
 ```
+
+## 3. Undirected Weighted Graphs :- 
+![graph (1)](https://user-images.githubusercontent.com/124666305/236163089-73509bc9-7101-4947-98f3-06a3f0d472b8.png)
+
+lets create the above graph from scratch :- 
+```cpp
+#include<iostream>
+#include<unordered_map>
+#include<map>
+#include<list>
+#include<queue>
+using namespace std;
+
+class Graph{
+    public:
+        map<int,list<pair<int,int>>> AdjList;
+    
+    // graph edge inserter 
+    void insertEdge(int vertex1, int vertex2, int weight){
+        AdjList[vertex1].push_back({vertex2, weight});  // undirected, unweighted graph
+        AdjList[vertex2].push_back({vertex1, weight});
+    }
+
+    void insertEdge(int vertex1){ // when there are different components of a graph 
+        AdjList[vertex1];
+    }
+
+    //print graph
+    void printAdj(){
+
+        for(auto block:AdjList){
+            int node1 = block.first;
+            cout << node1 << " -> ";
+            for(auto neighBlock:AdjList[node1]){
+                int neigh = neighBlock.first;
+                int weight = neighBlock.second;
+                cout << "{" << neigh<< "," << weight << "} ";
+            }
+
+            cout << endl;
+        }
+    }
+
+    // BFS
+    void BFSHelper(unordered_map<int,bool> &visited, int src){
+        
+        queue<int> q;
+        q.push(src);
+        visited[src] = true;
+
+        while(!q.empty()){
+
+            int front = q.front();
+            q.pop();
+            cout << front << " ";
+
+            for(auto neighBlock :AdjList[front]){
+                int neigh = neighBlock.first;
+                if(!visited[neigh]){
+                    q.push(neigh);
+                    visited[neigh] = true;
+                }
+            }
+        }
+    }
+
+    void BFS(){
+        unordered_map<int,bool> visited;
+        for(auto block:AdjList){
+            int node1 = block.first;
+            if(!visited[node1]){
+                BFSHelper(visited, node1);
+            }
+        }
+    }
+
+    // DFS
+    void DFSHelper(unordered_map<int,bool> &visited, int src){
+        visited[src] = true;
+        cout << src << " ";
+        for(auto neighBlock :AdjList[src]){
+            int neigh = neighBlock.first;
+            if(!visited[neigh])
+                DFSHelper(visited, neigh);
+        }
+    }
+
+    void DFS(){
+        unordered_map<int,bool> visited;
+        for(auto block:AdjList){
+            int node1 = block.first;
+            if(!visited[node1])
+                DFSHelper(visited, node1);
+        }
+    }
+
+};
+
+int main(){
+
+    //graph creation
+    Graph g1;
+
+    g1.insertEdge(1,2,3);
+    g1.insertEdge(1,3,2);
+    g1.insertEdge(3,2,2);
+    g1.insertEdge(2,5,1);
+    g1.insertEdge(3,5,1);
+    g1.insertEdge(4,5,2);
+
+    // print the Adj List 
+    cout << "AdjList :- " << endl;
+    g1.printAdj();
+
+    // BFS
+    cout << "BFS Traversal : ";
+    g1.BFS();
+    cout << endl;
+
+    // DFS
+    cout << "DFS Traversal : ";
+    g1.DFS();
+    cout << endl;
+
+
+}
+/*
+
+Output 
+
+AdjList :- 
+1 -> {2,3} {3,2}       
+2 -> {1,3} {3,2} {5,1} 
+3 -> {1,2} {2,2} {5,1} 
+4 -> {5,2} 
+5 -> {2,1} {3,1} {4,2} 
+
+BFS Traversal : 1 2 3 5 4 
+DFS Traversal : 1 2 3 5 4 
+
+note : [in the AdjList above, 1->{2,3} means 1 has neigh 2 with an edge between them of weight 3 i,e something like this 
+
+            3 
+        1------>2
+]
+
+
+*/
+
+
+
+
+
+```
