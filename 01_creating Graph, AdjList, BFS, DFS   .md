@@ -1,3 +1,7 @@
+# Graphs :
+
+### 1. Undirected Unweighted Graphs 
+```cpp
 #include<iostream>
 #include<unordered_map>
 #include<map>
@@ -5,11 +9,9 @@
 #include<queue>
 using namespace std;
 
-// Task - let us implement the Graph, then print its AdjList, do its BFS and DFS traversal as well.
-
 class Graph{
     public:
-        map<int,list<int>> AdjList;  // for mapping every vertex with its neigh we use this data structure
+        map<int,list<int>> AdjList;
     
     // graph edge inserter 
     void insertEdge(int vertex1, int vertex2){
@@ -115,10 +117,11 @@ int main(){
     cout << "DFS Traversal : ";
     g1.DFS();
     cout << endl;
-}
 
+}
 /*
-Output :- 
+
+Output 
 
 1 -> 2 3 4 
 2 -> 1 4 
@@ -131,3 +134,5 @@ DFS Traversal : 1 2 4 3
 
 
 
+
+```
