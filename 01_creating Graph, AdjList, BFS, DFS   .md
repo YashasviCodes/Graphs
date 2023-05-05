@@ -409,8 +409,13 @@ note : [in the AdjList above, 1->{2,3} means 1 has neigh 2 with an edge between 
 
 */
 ```
-
 ## 4.Directed Weighted Graph 
+```
+        (0) ----1----> (1) ----4---> (2) -----1----> (3) -----3----> (4)
+         |                                            ^
+         |                                            |
+         |------------2-------------------------------|
+```
 
 ```cpp
 #include<iostream>
