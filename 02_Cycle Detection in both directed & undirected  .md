@@ -3,7 +3,7 @@
 - 2. Cycle Detection in Directed Graphs 
 
 -----
-## Cycle Detection in Undirected Graphs 
+## Cycle Detection (Undirected Graphs) 
 Example 1 
 
 ![graph](https://github.com/YashasviCodes/Graphs/assets/124666305/33280eef-f491-4c39-9f7a-59a23a987a50)
@@ -120,7 +120,19 @@ int main(){
     else cout << "Graph does not have any cycle" << endl;
     
 }
+```
 
+```cpp
+VIP Note:-
+
+what if we used this condition instead of the original :- 
+if( visited[neigh] && nodeToParent[neigh] != src)
+    return "CYCLE FOUND"
+    
+ then in that case we would get stuck, on examples like this :- 
+ 1---2---3
 
 ```
 
+-------------
+## Cycle Detection (Directed Graphs)
