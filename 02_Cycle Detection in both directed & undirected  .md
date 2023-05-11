@@ -24,6 +24,7 @@ Code : (cycle detection in undirected graphs)
 #include<list>
 using namespace std;
 
+//note :- we can use the 'parent' D.S but do not need that.
 // Detect Cycle in Undirected Graph 
 
 class Graph{
@@ -37,20 +38,19 @@ class Graph{
     }
 
     // check for cycle in this directed graph
-    bool DFS(unordered_map<int,bool> &visited, unordered_map<int,int> &nodeToParent,int parent, int src){
+    bool DFS(unordered_map<int,bool> &visited,int parentOfSrc, int src){
         
         visited[src] = true; // visit node and set the parent of it
-        nodeToParent[src] = parent;
 
         for(int neigh:AdjList[src]){
 
             // if neigh is visited then.
             //1. for no cycle - we must have reached neigh via src  (i.e src's parent should be neigh)
             //2. if above cond is false that means we reached the neigh not via src but some other node
-            if(visited[neigh] && nodeToParent[src] != neigh)
+            if(visited[neigh] && parentOfSrc != neigh)
                 return true; // CYCLE 
             else if(!visited[neigh]){
-                bool hasCycle = DFS(visited, nodeToParent, src, neigh);
+                bool hasCycle = DFS(visited, src, neigh);
                 if(hasCycle)
                     return true; // CYCLE
             }
@@ -61,15 +61,13 @@ class Graph{
     }
 
     bool containsCycle(){
-        
-        unordered_map<int,int> nodeToParent;
         unordered_map<int,bool> visited;
 
         int V = AdjList.size();
         for(int node = 1; node <= V; node++){
             if(!visited[node]){
                 int parent = -1; // for starting node of each component the parent is -1 
-                bool hasCycle = DFS(visited, nodeToParent, parent, node);
+                bool hasCycle = DFS(visited, parent, node);
                 if(hasCycle)
                     return true; // cycle found
             }
@@ -84,13 +82,13 @@ int main(){
 
     Graph g;
 /*
-    //Graph has cycle. - Test case 3
+    //Graph has cycle.
     g.insertEdge(1,2);
     g.insertEdge(2,3);
     g.insertEdge(3,1);
 */
 
-    // graph doesnt have any cycle - Test case 2
+    // graph doesnt have any cycle 
     g.insertEdge(1,2);
     g.insertEdge(2,3);
     g.insertEdge(3,4);
@@ -99,7 +97,7 @@ int main(){
 
 
 /*
-    // Graph has cycle. - Test case 3
+    // Graph has cycle.
     g.insertEdge(1,2);
     g.insertEdge(2,5);
     g.insertEdge(2,3);
@@ -108,7 +106,7 @@ int main(){
     g.insertEdge(5,6);
 */
 /*
-    // Graph does not have any cycle. - Test case 4
+    // Graph does not have any cycle.
    g.insertEdge(1,2);
    g.insertEdge(2,3);
    g.insertEdge(3,4);
@@ -122,5 +120,7 @@ int main(){
     else cout << "Graph does not have any cycle" << endl;
     
 }
+
+
 ```
 
