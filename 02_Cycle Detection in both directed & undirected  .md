@@ -136,3 +136,108 @@ if( visited[neigh] && nodeToParent[neigh] != src)
 
 -------------
 ## Cycle Detection (Directed Graphs)
+
+Example 1:- 
+
+![graph (2)](https://github.com/YashasviCodes/Graphs/assets/124666305/16849301-bd51-4458-9398-2ca162789476)
+
+`Output : cycle found`
+
+Example 2 :- 
+
+![graph (3)](https://github.com/YashasviCodes/Graphs/assets/124666305/a3e78d41-ca5a-4350-bb82-b0e9673b94e9)
+
+`Output : cycle not found`
+
+```cpp
+// lets create a directed graph 
+#include<iostream>
+#include<list>
+#include<queue>
+#include<map>
+#include<unordered_map>
+using namespace std;
+
+class Graph{
+    public:
+        map<int,list<int>> AdjList;
+
+    void insertEdge(int vertex1, int vertex2){ // this will create v1 --> v2
+        AdjList[vertex1].push_back(vertex2);
+        AdjList[vertex2];
+    }
+
+    // check for cycle in graph 
+    bool DFS(unordered_map<int,bool> &visited, unordered_map<int,bool> &dfsVisited, int src){
+        
+        visited[src] = true;
+        dfsVisited[src] = true;
+
+        for(int neigh:AdjList[src]){
+
+            // when a node is visited, as well as DFSvisited, that means that we reached 'neigh' through neigh (CYCLE FOUND)
+            if(visited[neigh] && dfsVisited[neigh])  
+                return true;
+
+            // else call DFS only if we have not already visited that not 
+            else if(!visited[neigh]){
+                bool hasCycle = DFS(visited, dfsVisited, neigh);
+                if(hasCycle)
+                    return true; // CYCLE found 
+            }
+        }
+
+        // when all the neigh are visited for a node, that means cycle was not found, so unvisit the dfsVisited map, because we need to search for some other path 
+        dfsVisited[src] = false;
+
+        return false; // CYCLE not found 
+    }
+    bool cyclePresent(){
+
+        unordered_map<int,bool> visited;
+        unordered_map<int,bool> dfsVisited;
+        int V = AdjList.size();
+
+        // DFS for all components 
+        for(int node=1; node < V; node++){
+            if(!visited[node]){
+                bool hasCycle = DFS(visited, dfsVisited,node);
+                if(hasCycle) 
+                    return true; // cycle present 
+            }
+        }
+        return false; // cycle not found
+    }
+};
+
+int main(){
+
+    Graph g;
+
+    // // TestCase 1 - graph with cycle present 
+    g.insertEdge(3,4);
+    g.insertEdge(3,2);
+    g.insertEdge(4,2);
+    g.insertEdge(4,5);
+    g.insertEdge(2,1);
+    g.insertEdge(5,6);
+    g.insertEdge(6,1);
+    g.insertEdge(6,3);
+
+    // //TestCase 2 - graph does'nt has cycle 
+    // g.insertEdge(1,3);
+    // g.insertEdge(1,4);
+    // g.insertEdge(3,4);
+    // g.insertEdge(4,5);
+
+
+    bool hasCycle = g.cyclePresent();
+
+    if(hasCycle)
+        cout << "Cycle is present." << endl;
+    else cout << "Cycle is not present." << endl;
+
+    return 0;
+}
+
+```
