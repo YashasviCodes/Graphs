@@ -148,7 +148,13 @@ Example 2 :-
 ![graph (3)](https://github.com/YashasviCodes/Graphs/assets/124666305/a3e78d41-ca5a-4350-bb82-b0e9673b94e9)
 
 `Output : cycle not found`
-
+```
+note : in the below approach we used 2 maps 1) visited 2) dfsVisited 
+        why so ?
+        because visited is maintained so that if we visited a path and no cycle was found, then we never visit it again because that will be just waste of time 
+        so using 'visited' makes the approach efficient 
+        and for 'dfsVisited' it is used to maintain the curr path that we are on .
+```
 ```cpp
 // lets create a directed graph 
 #include<iostream>
