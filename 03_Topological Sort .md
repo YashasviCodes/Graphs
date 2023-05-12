@@ -86,12 +86,88 @@ int main(){
 
 input :- 
 
+![graph](https://github.com/YashasviCodes/Graphs/assets/124666305/6f949e72-72f7-41af-956c-f7ed652a2854)
+
 flow :- 
+![Ziteboard (3)](https://github.com/YashasviCodes/Graphs/assets/124666305/80920e2d-a59a-405c-80cf-09d132e2ae96)
 
 Output :- 
-
+`Toposort : 1, 2, 4, 5, 6, 7`
 
 code:- 
 ```cpp
+#include<iostream>
+#include<queue>
+#include<unordered_map>
+#include<list>
+#include<stack>
+using namespace std;
 
+/* Topological Sort is always applied on the directed acyclic graph
+
+    2 ways to apply toposort 
+        1. DFS toposort
+            - in case of cyclic graphs the order of the toposort is not corrct, while the number of elements in toposort == number of verticies
+        2. BFS toposort (kahn's Algo)
+            - in case of cyclic graphs teh order of BFS toposort is not correct as well as the number of ele != total verticies 
+              so this makes us eaisily detect cycle in a graph, and also it is a faster way to detect cycle because (BFS is somewhat faster)
+
+*/
+class Graph{
+    public:
+        unordered_map<int,list<int>> AdjList;
+    void insertEdge(int vertex1, int vertex2){
+        AdjList[vertex1].push_back(vertex2); // directed graph 
+    }
+    
+    // topoSort BFS (Kahn's Algo)
+    void topoSortBFS(){
+        unordered_map<int,int> nodeToIndegree;
+        queue<int> q; 
+
+        // find indegree of each node
+        for(auto block:AdjList){
+            int node = block.first;
+            for(int neigh:AdjList[node]){
+                nodeToIndegree[neigh]++;
+            }
+        }
+
+        // push the nodes with indegree 0 into q 
+        for(int i=1; i < nodeToIndegree.size(); i++)
+            if(nodeToIndegree[i] == 0)
+                q.push(i);
+            
+        while(!q.empty()){
+
+            int front = q.front();
+            q.pop();
+            cout << front << " ";
+
+            // decrement indegree of all neighbours of front
+            for(int neigh:AdjList[front]){
+                nodeToIndegree[neigh]--;
+                if(nodeToIndegree[neigh] == 0) // and if their indegree becomes 0, push them into q
+                    q.push(neigh);
+            }
+        }
+    }
+
+};
+
+int main(){
+    Graph g;
+    g.insertEdge(1,2);
+    g.insertEdge(1,4);
+    g.insertEdge(2,5);
+    g.insertEdge(4,5);
+    g.insertEdge(2,3);
+    g.insertEdge(5,6);
+    g.insertEdge(3,6);
+    
+    cout << "BFS toposort :- ";
+    g.topoSortBFS();
+    cout << endl;
+
+}
 ```
