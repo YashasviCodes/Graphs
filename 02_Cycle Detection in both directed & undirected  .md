@@ -1,6 +1,9 @@
 # Cycle Detection
 - 1. Cycle Detection in Undirected Graphs 
+     - (Method:1) Using 'parent' logic
 - 2. Cycle Detection in Directed Graphs 
+     - (Method:1) Using 'visited' + 'visitedDFS' logic 
+- 3. Cycle Detection Using BFS Toposort (Kahn's Algo)  
 
 -----
 ## Cycle Detection (Undirected Graphs) 
