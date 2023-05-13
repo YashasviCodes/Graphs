@@ -250,3 +250,106 @@ int main(){
 }
 
 ```
+
+--------
+## Cycle Detection using BFS Toposort (Kahn's Algo)
+
+Example 1 : (No cycke)
+![graph](https://github.com/YashasviCodes/Graphs/assets/124666305/62ad9bd2-188b-4f4d-a496-16345254dec8)
+
+Example 2 : (Cycle)
+![graph (1)](https://github.com/YashasviCodes/Graphs/assets/124666305/f5dea503-44ec-4b6a-b421-e698a4955812)
+
+```cpp
+// lets create a directed graph 
+#include<iostream>
+#include<list>
+#include<queue>
+#include<map>
+#include<unordered_map>
+using namespace std;
+
+class Graph{
+    public:
+        map<int,list<int>> AdjList;
+
+    void insertEdge(int vertex1, int vertex2){ // this will create v1 --> v2
+        AdjList[vertex1].push_back(vertex2);
+        AdjList[vertex2];
+    }
+
+    // loop detection using BFS toposort (Kahn's Algo)
+
+    bool loopDetectionTopoSort(){
+
+        unordered_map<int,int> nodeToIndegree;
+        queue<int> q;
+        vector<int> topoSort;
+
+        for(auto block:AdjList){ // find the indegree of each node
+            int node = block.first;
+            nodeToIndegree[node]; // creating block so every node has a block in 'nodeToInd' map
+            for(int neigh:block.second ){
+                nodeToIndegree[neigh]++;
+            }
+        }
+
+        for(auto block:nodeToIndegree)// pushh the 0 indegree nodes into q 
+        {
+            int node = block.first;
+            if(nodeToIndegree[node] == 0)
+                q.push(node);
+        }
+
+        // BFS
+        while(!q.empty()){
+            int front = q.front(); q.pop();
+            topoSort.push_back(front);
+
+            for(int neigh:AdjList[front]){// we are virtually removing the 'front' so decrement its neigh's indegree by 1
+                nodeToIndegree[neigh]--;
+                if(nodeToIndegree[neigh] == 0) // if neigh's indegree becomes 0 then push it into the queue as well
+                    q.push(neigh);
+            }
+        }
+
+        // now just check if the number of nodes in graph == topposort size (if yes, that means cycle not found)
+        if(topoSort.size() == AdjList.size()){
+            return false; // No cycle
+        }
+        return true; // cycle
+    }
+
+};
+
+int main(){
+
+    Graph g;
+    
+    // // Test Case - 1 (no cycle)
+    // g.insertEdge(2,1);
+    // g.insertEdge(2,3);
+    // g.insertEdge(4,1);
+    // g.insertEdge(3,4);
+    // g.insertEdge(2,5);
+    // g.insertEdge(5,6);
+    // g.insertEdge(7,5);
+
+    // Test case - 2 (cyclic)
+    g.insertEdge(1,4);
+    g.insertEdge(1,2);
+    g.insertEdge(4,3);
+    g.insertEdge(2,3);
+    g.insertEdge(3,5);
+    g.insertEdge(5,2);
+
+    
+    bool isCyclicGraph = g.loopDetectionTopoSort();
+    
+    if(isCyclicGraph)
+        cout << "Cycle Found";
+    else cout << "no Cycle exists";
+
+}
+
+```
