@@ -14,8 +14,9 @@ Shortest path length : 6
 (0,0) --> (0,1) --> (0,2) --> (1,2) --> (1,3) --> (2,3) --> (3,3)
 ```
 
-Time : $ O(n*m) $ - n is number of rows, m is cols
-Space : $ O(n*m) $
+Time : $O(n*m)$ 
+
+Space : $O(n*m)$
 
 code:-
 ```cpp
