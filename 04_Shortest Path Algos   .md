@@ -265,5 +265,105 @@ OUTPUT
 shortest Path : 1-->3-->8
 ```
 ```cpp
+#include<iostream>
+#include<list>
+#include<unordered_map>
+#include<queue> 
+#include<vector>
+using namespace std;
 
+class Graph{
+    
+    public:
+        unordered_map<int,list<int>> AdjList;
+    void insertEdge(int vertex1, int vertex2){
+        AdjList[vertex1].push_back(vertex2);
+        AdjList[vertex2].push_back(vertex1); // undirected graph
+    }
+
+    vector<int> shortestPathBFS(int srcNode, int destiNode){
+
+        unordered_map<int,bool> visited;
+        queue<pair<int,vector<int> >> q;
+        q.push({srcNode,{srcNode}}); // initially curr path is empty
+        visited[srcNode] = true;
+
+        while(!q.empty()){
+
+            auto front = q.front();
+            int frontNode = front.first;
+            vector<int> currPathVec = front.second;
+            q.pop();
+
+            // if we reached desti, then return the currpath
+            if(frontNode == destiNode)
+                return currPathVec;
+
+            // explore all neigh of the 'front' and if it's not visited, then insert that neigh into queue 
+            for(int neigh:AdjList[frontNode]){
+                
+                if(!visited[neigh]){
+
+                    currPathVec.push_back(neigh);
+                    q.push({neigh,currPathVec}); 
+
+                    visited[neigh] = true;
+                    // if neigh is desti return currPath
+                    if(neigh == destiNode)
+                        return currPathVec;
+
+                        
+                    currPathVec.pop_back(); // if we do not do then other's result will be disturbed
+
+                }
+            }
+        }
+
+        return {};// reached here means no path exists that can take us to 'desti' node
+        
+    }
+};
+
+int main(){
+
+    Graph g;
+
+
+    // Shortest Path length : 3
+    //shortest Path : 1-->1-->3
+    g.insertEdge(1,2);
+    g.insertEdge(1,3);
+    g.insertEdge(1,4);
+    g.insertEdge(2,5);
+    g.insertEdge(3,8);
+    g.insertEdge(4,6);
+    g.insertEdge(5,8);
+    g.insertEdge(6,7);
+    g.insertEdge(7,8);
+
+/* 
+    g.insertEdge(1,4);
+    g.insertEdge(1,2);
+    g.insertEdge(1,3);
+    g.insertEdge(2,4);
+    g.insertEdge(2,3);
+*/
+
+    //input
+    int srcNode,destiNode;
+    cout << "Enter src and desti nodes : ";
+    cin >> srcNode >> destiNode;
+    vector<int> shortestPathVec = g.shortestPathBFS(srcNode, destiNode);
+
+    // printing shortest path 
+    cout << "Shortest Path length : " << shortestPathVec.size() -1 << endl;
+    cout << "shortest Path : ";
+    for(int i=0; i < shortestPathVec.size(); i++){
+        if(i == shortestPathVec.size()-1)
+            cout << shortestPathVec[i] << endl;
+        else cout << shortestPathVec[i] << "-->";
+    }
+
+    return 0;
+}
 ```
