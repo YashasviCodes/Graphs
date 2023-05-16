@@ -215,10 +215,7 @@ vector<pair<int,int>> shortestPathSrcDestiBFS(vector<vector<int>> &grid, int src
 }
 
 int main(){
-    cout<< "--------------------------------------------" << endl;
-
     // input
-
     vector<vector<int>> grid =   {{1,1,1,0},     // 0,0 -> 3,3 (shortest path len : 6)
                                   {0,1,1,1},
                                   {1,1,0,1},
@@ -255,10 +252,18 @@ int main(){
                 cout << "(" << block.first << "," << block.second << ") --> ";
         }
     }
-    
-
-    cout<< "\n--------------------------------------------" << endl;
-
-    
 }
+```
+### Shortest Path in Undirected-Graph (using BFS)
+
+![graph (2)](https://github.com/YashasviCodes/Graphs/assets/124666305/78ffa06a-ef01-4a18-b9b9-9ce11cc7fe72)
+```cpp
+INPUT 
+Enter src and desti nodes : 1 8
+Shortest Path length : 2
+OUTPUT 
+shortest Path : 1-->3-->8
+```
+```cpp
+
 ```
