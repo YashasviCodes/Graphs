@@ -1,4 +1,5 @@
-### Simple DFS for finding shortes path
+# Shortest Path in binary Matrix (src to desti)
+### Using DFS 
 
 ```cpp
 INPUT : 
@@ -14,7 +15,7 @@ Shortest path length : 6
 (0,0) --> (0,1) --> (0,2) --> (1,2) --> (1,3) --> (2,3) --> (3,3)
 ```
 
-Time : $O(n*m)$ 
+Time : $O((n*m)^2)$  ⚠️
 
 Space : $O(n*m)$
 
@@ -125,3 +126,139 @@ int main(){
 ```
 
 ----------------------------------
+
+### Using BFS 
+
+```
+INPUT 
+Enter src coordinates (row,col) : 0 0 
+Enter desti coordinates (row,col) : 3 3 
+
+OUTPUT 
+shortest Path Length : 7
+Shortest path vector :- 
+(0,0) --> (0,1) --> (0,2) --> (1,2) --> (1,3) --> (2,3) --> (3,3)
+
+```
+
+Time : $O(E+V)$ ⭐
+Space : $O(E+V)$
+
+code :- 
+
+```cpp
+#include<iostream>
+#include<vector>
+#include<queue>
+using namespace std;
+
+// BFS
+bool isSafeToMove(vector<vector<int>> &grid, vector<vector<bool>> &visited, int row, int col){
+    // if cell is in range && cell is not visited yet && is a '1' cell, then only its safe
+    int rowSize = grid.size(), colSize = grid[0].size();
+    if( (row >= 0 && row < rowSize) && (col >= 0 && col < colSize) && !visited[row][col] && grid[row][col] == 1)
+        return true;
+    return false;
+}
+
+// returns the shortest path vector.
+vector<pair<int,int>> shortestPathSrcDestiBFS(vector<vector<int>> &grid, int srcRow, int srcCol, int destiRow, int destiCol){
+
+    if(grid[srcRow][srcCol] == 0) // exception case- when start cell is '0' 
+        return {}; // no path 
+
+    int rowSize = grid.size(), colSize = grid[0].size(); 
+    // we need to maintain the curr path and the shortest path as well, also the visited cells 
+    vector<int> shortestPath, currPath;
+    vector<vector<bool>> visited(rowSize, vector<bool>(colSize, false));
+
+    // BFS - queue( { {front cell coordi}, currPathVec of pairs of coordinates } )
+    queue< pair< pair<int,int>, vector<pair<int,int>> > > q;
+    q.push({{srcRow, srcCol},{{srcRow,srcCol}}}); // currPathVec is empty at start cell  
+    visited[srcRow][srcCol] = true;
+
+    vector<int> deltaRow = {0, 0, -1, +1};  // will be using this for exploring the 4 neighbours of the front cell
+    vector<int> deltaCol = {-1, +1, 0, 0};
+
+    while(!q.empty()){
+
+        pair< pair<int,int>,vector<pair<int,int>>> front = q.front();
+        q.pop();
+        int frontRow = front.first.first; // fetched row and cols and currPathLen of the front block of q
+        int frontCol = front.first.second;
+        vector<pair<int,int>> currPathVec = front.second;
+
+        if(frontRow == destiRow && frontCol == destiCol) // if we reached desti, then return the pair 'currPathVec'
+            return currPathVec;
+
+        // exploring 4 neigh's of the frontCell
+        for(int i=0; i < deltaRow.size(); i++){
+
+            int nextRow = frontRow + deltaRow[i];
+            int nextCol = frontCol + deltaCol[i];
+            // if we reached desti, then this is the shortest path , reutrn it (but make sure to add the nectRow, nextCol as well into currPath)
+            if(nextRow == destiRow && nextCol == destiCol){
+                currPathVec.push_back({nextRow, nextCol});
+                return currPathVec;
+            } 
+
+            if(isSafeToMove(grid, visited, nextRow, nextCol)){ // if next coordinates are safe, then push them into currPath and also into q 
+                currPathVec.push_back({nextRow,nextCol});
+                q.push({{nextRow,nextCol}, currPathVec});
+                visited[nextRow][nextCol] = true;
+            }
+        }
+    }
+    // reached here means no path found that can take us to the desti 
+    return {}; // no path found
+    
+}
+
+int main(){
+    cout<< "--------------------------------------------" << endl;
+
+    // input
+
+    vector<vector<int>> grid =   {{1,1,1,0},     // 0,0 -> 3,3 (shortest path len : 6)
+                                  {0,1,1,1},
+                                  {1,1,0,1},
+                                  {1,1,1,1}}; 
+/*
+    vector<vector<int>> grid = {{1,1,1,0},     // 0,0 -> 3,3 (no path exists )
+                                  {0,0,0,0},
+                                  {1,1,0,1},
+                                  {1,1,1,1}}; 
+*/
+    cout << "Enter src coordinates (row,col) : ";
+    int srcRow, srcCol;
+    cin >> srcRow >> srcCol; 
+    cout << "Enter desti coordinates (row,col) : ";
+    int destiRow, destiCol;
+    cin >> destiRow >> destiCol;
+
+    // algo call
+    int rowSize = grid.size();
+    int colSize = grid[0].size();
+    vector<pair<int,int>> shortestPathVec = shortestPathSrcDestiBFS(grid,srcRow, srcCol, destiRow, destiCol);
+
+    if(shortestPathVec.size() == 0)
+        cout << "no path exists" << endl;
+    else{
+        cout << "shortest Path Length : " << shortestPathVec.size() << endl;
+        cout << "Shortest path vector :- " << endl;
+        for(int i=0; i < shortestPathVec.size(); i++){
+
+            pair<int,int> block = shortestPathVec[i];
+            if(i == shortestPathVec.size()-1) // last index
+                cout << "(" << block.first << "," << block.second << ") ";
+            else    
+                cout << "(" << block.first << "," << block.second << ") --> ";
+        }
+    }
+    
+
+    cout<< "\n--------------------------------------------" << endl;
+
+    
+}
+```
