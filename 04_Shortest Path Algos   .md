@@ -139,6 +139,7 @@ shortest Path Length : 7
 Shortest path vector :- 
 (0,0) --> (0,1) --> (0,2) --> (1,2) --> (1,3) --> (2,3) --> (3,3)
 
+![Matrix (BFS)](https://github.com/YashasviCodes/Graphs/assets/124666305/f96d97dc-3b4b-49a1-8976-ea64df9b410a)
 ```
 
 Time : $O(E+V)$ ⭐
