@@ -174,7 +174,7 @@ vector<pair<int,int>> shortestPathSrcDestiBFS(vector<vector<int>> &grid, int src
 
     // BFS - queue( { {front cell coordi}, currPathVec of pairs of coordinates } )
     queue< pair< pair<int,int>, vector<pair<int,int>> > > q;
-    q.push({{srcRow, srcCol},{{srcRow,srcCol}}}); // currPathVec is empty at start cell  
+    q.push({{srcRow, srcCol},{{srcRow,srcCol}} }); // currPathVec is empty at start cell  
     visited[srcRow][srcCol] = true;
 
     vector<int> deltaRow = {0, 0, -1, +1};  // will be using this for exploring the 4 neighbours of the front cell
@@ -206,6 +206,12 @@ vector<pair<int,int>> shortestPathSrcDestiBFS(vector<vector<int>> &grid, int src
                 currPathVec.push_back({nextRow,nextCol});
                 q.push({{nextRow,nextCol}, currPathVec});
                 visited[nextRow][nextCol] = true;
+                // if the nextCell is the desti , then return the curr path (including this neigh)
+                if(nextRow == destiRow && nextCol == destiCol)
+                    return currPathVec;
+                // ones this nextCell is done, make sure to remove it from curr path, else result path will be wrong 
+                currPathVec.pop_back();
+
             }
         }
     }
@@ -216,14 +222,23 @@ vector<pair<int,int>> shortestPathSrcDestiBFS(vector<vector<int>> &grid, int src
 
 int main(){
     // input
-    vector<vector<int>> grid =   {{1,1,1,0},     // 0,0 -> 3,3 (shortest path len : 6)
+
+    vector<vector<int>> grid =   {{1,1,1,0},     // 0,0 -> 3,3 (shortest path len : 6)☑️
                                   {0,1,1,1},
                                   {1,1,0,1},
                                   {1,1,1,1}}; 
+
 /*
-    vector<vector<int>> grid = {{1,1,1,0},     // 0,0 -> 3,3 (no path exists )
+    vector<vector<int>> grid = {{1,1,1,0},     // 0,0 -> 3,3 (no path exists )☑️
                                   {0,0,0,0},
                                   {1,1,0,1},
+                                  {1,1,1,1}}; 
+
+*/
+/*
+    vector<vector<int>> grid =   {{1,1,1,1},     // 0,0 -> 3,3 (shortest path len : 6)☑️
+                                  {1,1,1,0},
+                                  {1,1,0,0},
                                   {1,1,1,1}}; 
 */
     cout << "Enter src coordinates (row,col) : ";
@@ -241,7 +256,7 @@ int main(){
     if(shortestPathVec.size() == 0)
         cout << "no path exists" << endl;
     else{
-        cout << "shortest Path Length : " << shortestPathVec.size() << endl;
+        cout << "shortest Path Length : " << shortestPathVec.size()-1 << endl;
         cout << "Shortest path vector :- " << endl;
         for(int i=0; i < shortestPathVec.size(); i++){
 
