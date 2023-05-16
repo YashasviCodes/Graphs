@@ -278,6 +278,11 @@ int main(){
 ### Shortest Path in Undirected-Graph (using BFS)
 
 ![graph (2)](https://github.com/YashasviCodes/Graphs/assets/124666305/78ffa06a-ef01-4a18-b9b9-9ce11cc7fe72)
+
+Src = 1  Desti = 8
+
+![238679529-78ffa06a-ef01-4a18-b9b9-9ce11cc7fe72](https://github.com/YashasviCodes/Graphs/assets/124666305/533b5cfa-31b5-4b5f-ab4c-3c55337acd3a)
+
 ```cpp
 INPUT 
 Enter src and desti nodes : 1 8
