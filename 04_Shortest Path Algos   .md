@@ -563,4 +563,122 @@ int main(){
 
 }
 ```
+### Shortest Path from Src to Desti (Using DFS)
+
+```
+Time : $ O(2^(E+V))$
+Space : $ O(E+V) $
+
+```cpp
+#include<iostream>
+#include<unordered_map>
+#include<list>
+#include<vector>
+using namespace std;
+
+// T : 2(E+V)
+// S : E+V
+
+class Graph{
+    public:
+        unordered_map<int,list<int>> AdjList;
+    
+    void insertEdge(int vertex1, int vertex2){
+        AdjList[vertex1].push_back(vertex2);
+        AdjList[vertex2].push_back(vertex1);// undirected graph
+    }
+
+    // DFS - shortest path algo begins
+    void DFSHelper(vector<int> &finalPathVec, vector<int> &currPathVec, vector<bool> &visited, int src, int desti){
+        // if reached desti, then check if we got a path smaller then the prv saved one
+        if(src == desti){
+            if(finalPathVec.size() == 0 || finalPathVec.size() > currPathVec.size()) // update the finalPath if its already empty or if its greater sized then currPath
+                finalPathVec = currPathVec;
+            return;
+        }
+        visited[src] = true;
+        // explore all neigh of src
+        for(int neigh:AdjList[src]){
+            if(!visited[neigh]){
+                currPathVec.push_back(neigh);
+                DFSHelper(finalPathVec, currPathVec, visited, neigh, desti);// checking if another shorter path exists
+                currPathVec.pop_back();
+            }
+        }
+
+        // ones a node's all neigh are explored then make sure to unvisit it, (coz any other shorter path may exist)
+        visited[src] = false;
+    }
+
+    vector<int> shortestPathDFS(int src, int desti){
+        // we need to maintain the finalPath
+        int V = AdjList.size();
+        vector<int> finalPathVec;
+        vector<int> currPathVec;
+        vector<bool> visited(V, false);
+        
+        currPathVec.push_back(src);
+        DFSHelper(finalPathVec, currPathVec, visited, src, desti);
+        return finalPathVec;
+    }
+};
+
+int main(){
+
+    Graph g;
+/*
+    //creating graph      
+    g.insertEdge(0,1);     //src = 0, desti = 7 (path : 0 --> 3 --> 7) (len:2)☑️
+    g.insertEdge(0,3);
+    g.insertEdge(1,2);
+    g.insertEdge(2,5);
+    g.insertEdge(5,4);
+    g.insertEdge(4,3);
+    g.insertEdge(3,6);
+    g.insertEdge(3,7);
+*/
+
+/*
+    g.insertEdge(0,1);
+    g.insertEdge(0,2);
+    g.insertEdge(1,6);   // src=0 desti=5  shortest path len : 3 (0 --> 1 --> 6 --> 5)☑️
+    g.insertEdge(2,3);
+    g.insertEdge(6,5);
+    g.insertEdge(3,4);
+    g.insertEdge(4,5);
+*/
+
+    g.insertEdge(0,1);
+    g.insertEdge(0,5);  // src=0 desti=4 ,  path len : 1, (0 --> 4)☑️
+    g.insertEdge(0,4);
+    g.insertEdge(1,2);
+    g.insertEdge(2,3);
+    g.insertEdge(5,6);
+    g.insertEdge(6,4);
+
+    int src, desti;
+    cout << "Enter src and desti : ";
+    cin >> src >> desti;
+
+    vector<int> shortestPathVec = g.shortestPathDFS(src, desti);
+
+    if(shortestPathVec.size() == 0){
+        cout << "no path exists" << endl;
+        return 0;
+    }
+    else{
+        // print the shortest path 
+        cout << "Shortest path length : " << shortestPathVec.size()-1 << endl; 
+        for(int i=0; i < shortestPathVec.size(); i++){
+            int node = shortestPathVec[i];
+            if(i == shortestPathVec.size()-1) // last index
+                cout << node << endl;
+            else cout << node << " --> ";
+        }
+    }
+
+    
+
+}
+```
 
