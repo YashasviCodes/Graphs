@@ -564,6 +564,12 @@ int main(){
 }
 ```
 ### Shortest Path from Src to Desti (Using DFS)
+![graph (4)](https://github.com/YashasviCodes/Graphs/assets/124666305/80b0eea9-0815-4c89-824d-c6ee5e7f499d)
+
+![graph (4) - ii](https://github.com/YashasviCodes/Graphs/assets/124666305/2f5dc31f-8d15-4aa6-b245-c30abafe85d9)
+
+Output : - 
+shortest Path : (0 --> 1 --> 6 --> 5)
 
 ```
 Time : $ O(2^(E+V))$
