@@ -408,3 +408,159 @@ int main(){
     return 0;
 }
 ```
+### Shortest Path BFS (using Parent D.s)
+
+![graph (3)](https://github.com/YashasviCodes/Graphs/assets/124666305/b96ff383-191f-4406-8e63-6925d8507c5f)
+
+Src :0  Desti : 5
+![graph (3) - II](https://github.com/YashasviCodes/Graphs/assets/124666305/bee09d3f-ab16-4f1c-afe6-10e3b5d4c77f)
+
+shortest Path : 0 -> 1 -> 6 -> 5
+
+```cpp
+#include<iostream>
+#include<queue>
+#include<unordered_map>
+#include<list>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+class Graph{
+    public:
+        unordered_map<int,list<int>> AdjList;
+
+        void insertEdge(int vertex1, int vertex2){
+            AdjList[vertex1].push_back(vertex2);
+            AdjList[vertex2].push_back(vertex1);// unordered_map
+        }  
+
+        // shortest path algo begins
+
+        bool BFSHelper(vector<int> &parent, int src, int desti){
+            
+            int V = AdjList.size();
+            vector<bool> visited(V, false); 
+            queue<int> q; 
+            q.push(src);
+            visited[src] = true;
+            parent[src] = -1;   // src has no parent
+
+            while(!q.empty()){
+                
+                int front = q.front();
+                q.pop();
+
+                // if front is desti node, then return true
+                if(front == desti) return true;
+
+                for(int neigh:AdjList[front]){
+                    if(!visited[neigh]){ 
+                        q.push(neigh);
+                        visited[neigh] = true;
+                        parent[neigh] = front;
+
+                        // if neigh is the destination, return true
+                        if(neigh == desti) return true;
+                    }
+                }
+            }
+
+            // reached here means no path found from src to desti 
+            return false;
+        }
+
+        vector<int> shortestPathBFS(int src, int desti){
+            int V = AdjList.size();
+            //we need a parent vector to trace the route back from desti to src
+            vector<int> parent(V); // index = node 'a', value = node that dropped 'a' into q
+            bool pathFound = BFSHelper(parent, src, desti); // this fun will fill parent vector and returns 1 if any shortest route found 
+
+            vector<int> shortestPathVec;
+            if(pathFound){ // trace it
+                int node = desti;
+                int parentNode = parent[node];
+                while(parentNode != -1){ // loop till we get a node with parent of -1 i.e the src node
+                    shortestPathVec.push_back(node);
+
+                    node = parentNode;
+                    parentNode = parent[node];// updation 
+                }
+                shortestPathVec.push_back(node); // src node
+
+                reverse(shortestPathVec.begin(), shortestPathVec.end()); // reverse the order of shortest path  
+                return shortestPathVec;
+            }
+
+            else return {}; // no path
+
+
+            
+        }
+
+};
+
+int main(){
+
+    // creating graph 
+    Graph g;
+/*   
+    g.insertEdge(0,1);     // src = 0, desti = 7 (shortest Path :  0 --> 8 --> 7)☑️
+    g.insertEdge(0,8);
+    g.insertEdge(0,2);
+    g.insertEdge(1,3);
+    g.insertEdge(8,7);
+    g.insertEdge(2,4);
+    g.insertEdge(3,5);
+    g.insertEdge(4,6);
+    g.insertEdge(5,7);
+    g.insertEdge(6,7);
+*/
+
+/*
+    g.insertEdge(0,1);     // src = 0, desti = 4 (shortest Path :  0 --> 4)☑️
+    g.insertEdge(0,5);
+    g.insertEdge(0,4);
+    g.insertEdge(1,2);
+    g.insertEdge(2,3);
+    g.insertEdge(5,6);
+    g.insertEdge(6,4);
+*/
+
+    g.insertEdge(0,1);   // src = 0 desti 5 (shortest path : 0 --> 1 --> 6 --> 5)
+    g.insertEdge(0,2);
+    g.insertEdge(1,6);
+    g.insertEdge(2,3);
+    g.insertEdge(6,5);
+    g.insertEdge(3,4);
+    g.insertEdge(4,5);
+
+    //input 
+    int src, desti;
+    cout << "Enter src & desti nodes : ";
+    cin >> src >> desti;
+
+    // finding shortest path vector
+    vector<int> shortestPathVec = g.shortestPathBFS(src, desti);
+
+    //priting shortest path 
+    if(shortestPathVec.size() == 0){
+        cout << "No path found" << endl;
+        return 0;
+    }
+
+    cout << "Shortest Path Len : " << shortestPathVec.size() - 1 << endl;
+    cout << "Shortest Path :- ";
+    for(int i=0; i < shortestPathVec.size(); i++){
+        int node = shortestPathVec[i];
+        if(i == shortestPathVec.size()-1)
+            cout << node << endl;
+        else cout << node << " --> ";
+
+    }
+
+    return 0;
+
+}
+```
+
