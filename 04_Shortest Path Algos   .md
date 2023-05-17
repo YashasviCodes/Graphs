@@ -572,7 +572,6 @@ input : Src=0  dest=5
 Output : - 
 shortest Path : (0 --> 1 --> 6 --> 5)
 
-```
 Time : $ O(2^(E+V))$
 Space : $ O(E+V) $
 
