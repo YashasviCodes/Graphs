@@ -1,4 +1,17 @@
 # Shortest Path in binary Matrix (src to desti)
+Find Shortest Paths in :- 
+### 1. in Binary Matrix from src to desti 
+- DFS 
+- BFS
+### 2. Undirected/Directed Graphs from Src to desti 
+- DFS
+- BFS 
+  - BFS (simple BFS) 
+  - BFS (using Parent D.S links to trace back the route)
+### 3. Shortest Path from src to all nodes. 
+  - Dijkstra's Algo
+  - Prim's Algo
+---------------------
 ### Using DFS 
 
 ```cpp
