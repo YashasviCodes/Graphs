@@ -705,7 +705,10 @@ shortest dist from src to 4 is 5
 shortest dist from src to 5 is 6
 shortest dist from src to 6 is 2
 ```
-
+```
+Time : O(E+V)
+Space : O(E+V)
+```
 ```cpp
 #include<iostream>
 #include<unordered_map>
