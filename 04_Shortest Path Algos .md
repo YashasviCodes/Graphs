@@ -9,6 +9,7 @@ Find Shortest Paths in :-
   - BFS (simple BFS) 
   - BFS (using Parent D.S links to trace back the route)
 ---------------------
+note : one thing to note is that the above algos find the shortest distance (where the distance means the edges, and not the cost or weight)
 ---------------------
 
 ## 1. [Binary Matrix] Shortest Path from src to desti
