@@ -8,9 +8,6 @@ Find Shortest Paths in :-
 - BFS 
   - BFS (simple BFS) 
   - BFS (using Parent D.S links to trace back the route)
-### 3. Shortest Path from src to all nodes. 
-  - Dijkstra's Algo
-  - Prim's Algo
 ---------------------
 ---------------------
 
