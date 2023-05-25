@@ -141,3 +141,261 @@ int main(){
 }
 
 ```
+
+---------------------
+## Dijkstra's Algo 
+
+![graph (3)](https://github.com/yashasviyadav1/Graphs/assets/124666305/9d340e9e-2381-4563-996f-f3f7ef2472ef)
+
+`Source : 1`
+`desti : 6`
+
+### (Version-1) Finding shortest distance from src to all nodes 
+```cpp
+#include<iostream>
+#include<unordered_map>
+#include<set>
+#include<list>
+#include<algorithm>
+using namespace std;
+
+// Dijkstras Algo (for shortest path distance from src to all nodes)
+
+/* imp notes :- 
+
+    1) here we are not using a visitd array and still not getting inside a infinite loop but why so?
+       if we observe carefully, we are not inserting all neigh nodes of a 'topNode' we are only inserting whenever a shorter distance to reach that neigh is found, and 
+       there can only be single shortest path to reach a 'neigh' and thats why we will not need any visited array 
+
+    2) to find the shortest distance we can simply apply Dijkstra's Algo, but in case we want to know the shortest path from src to a node as well then in that case, 
+       every time we find a shorter distance path we will need to make links backward, and ones our dijkstra is done, we can just trace our route backward to the src.
+       -> for this we need a parent array. 
+
+*/
+class Graph{
+
+    public:
+        unordered_map<int,list<pair<int,int>>> AdjList;
+
+        void insertEdge(int vertex1, int vertex2, int weight){
+            AdjList[vertex1].push_back({vertex2, weight}); // weighted undirected graph
+            AdjList[vertex2].push_back({vertex1, weight});
+        }
+
+        // ---------------
+
+        vector<int> dijkstraAlgo(int src){
+
+            int V = AdjList.size();
+            vector<int> minDist(V + 1, INT_MAX);
+            // we need a minHeap or ordered_set for this 
+            set<pair<int,int>> set;
+            set.insert({src,0});
+            minDist[src] = 0;
+
+            while(!set.empty()){
+
+                auto frontPair = set.begin();
+                set.erase(set.begin());
+                int frontNode = frontPair -> first;
+                int frontWeight = frontPair -> second;
+
+                // explore all neigh of the front
+                for(pair<int,int> neighPair:AdjList[frontNode]){
+                    int neigh = neighPair.first;
+                    int weight = neighPair.second;
+
+                    // if dis via 'frontNode' to 'neigh' is lesser then neigh's prv distance, then update both the 'minDist' and 'set'
+                    if(minDist[frontNode] + weight < minDist[neigh]){
+
+                        // for 'set', if a prv entry of the 'neigh' is present then del it
+                        auto prvEntry = set.find({neigh,minDist[neigh]});
+                        if(prvEntry != set.end()) // entry is present already
+                            set.erase(prvEntry);
+                        
+                        minDist[neigh] = minDist[frontNode] + weight; //updating distance with a new shorter one
+                        set.insert({neigh,minDist[neigh]});// insert new entry with new minDist for 'neigh'   
+                    }
+                }
+            }
+            return minDist;
+
+        }
+};
+
+int main(){
+    Graph g;
+    g.insertEdge(1, 2, 1);
+    g.insertEdge(1, 3, 3);
+    g.insertEdge(2, 3, 1);
+    g.insertEdge(1, 6, 2);
+    g.insertEdge(3, 4, 2);
+    g.insertEdge(6, 4, 2);
+    g.insertEdge(6, 5, 0);
+    g.insertEdge(5, 4, 1);
+
+    // dijkstras algo
+    int src;
+    cout << "Enter src : ";
+    cin >> src;
+    vector<int> minDist = g.dijkstraAlgo(src);
+
+    for(int i=1; i < minDist.size(); i++){
+        cout << "min dist from " << src << " to " << i << " is : " << minDist[i] << endl;
+    }
+}
+
+
+```
+
+### (Version-2) finding shortest path to all nodes via dijkstra 
+![graph (3)](https://github.com/yashasviyadav1/Graphs/assets/124666305/9c78d7b9-c31c-4788-b31c-eb9280ce261e)
+
+`source : 1, desti : 6` 
+```
+input :
+Enter src : 1
+Enter destination : 6
+
+Output : 
+
+min dist from 1 to 1 is : 0
+min dist from 1 to 2 is : 1
+min dist from 1 to 3 is : 2
+min dist from 1 to 4 is : 2
+min dist from 1 to 5 is : 2
+min dist from 1 to 6 is : 3
+
+shortest path from 1 to 6 is : 1 -> 3 -> 5 -> 6
+```
+
+Code : 
+```cpp
+#include<iostream>
+#include<unordered_map>
+#include<set>
+#include<list>
+#include<algorithm>
+using namespace std;
+
+// Dijkstras Algo (for Shortest Path printing from src to desti)
+
+class Graph{
+
+    public:
+        unordered_map<int,list<pair<int,int>>> AdjList;
+
+        void insertEdge(int vertex1, int vertex2, int weight){
+            AdjList[vertex1].push_back({vertex2, weight}); // weighted undirected graph
+            AdjList[vertex2].push_back({vertex1, weight});
+        }
+
+        // ---------------
+
+        void dijkstraAlgo(vector<int> &minDist, vector<int> &nodeToParent, int src){ // this fun will fill the 'minDist' and 'nodeToParent' vector
+
+            int V = AdjList.size();
+
+            // we need a minHeap or ordered_set for this 
+            set<pair<int,int>> set;
+            set.insert({src,0});
+            minDist[src] = 0;
+            nodeToParent[src] = -1; // src is the starting node
+
+            while(!set.empty()){
+
+                auto frontPair = set.begin();
+                set.erase(set.begin());
+                int frontNode = frontPair -> first;
+                int frontWeight = frontPair -> second;
+
+                // explore all neigh of the front
+                for(pair<int,int> neighPair:AdjList[frontNode]){
+                    int neigh = neighPair.first;
+                    int weight = neighPair.second;
+
+                    // if dis via 'frontNode' to 'neigh' is lesser then neigh's prv distance, then update both the 'minDist' and 'set'
+                    if(minDist[frontNode] + weight < minDist[neigh]){
+
+                        // for 'set', if a prv entry of the 'neigh' is present then del it
+                        auto prvEntry = set.find({neigh,minDist[neigh]});
+                        if(prvEntry != set.end()) // entry is present already
+                            set.erase(prvEntry);
+                        
+                        nodeToParent[neigh] = frontNode;// now every time we get a shorter path parent for neigh, update it in vector
+                        minDist[neigh] = minDist[frontNode] + weight; //updating distance with a new shorter one
+                        set.insert({neigh,minDist[neigh]});// insert new entry with new minDist for 'neigh'   
+                    }
+                }
+            }
+        }
+};
+
+int main(){
+
+    cout << "-----------------------------------------------" << endl;
+
+    Graph g;
+    g.insertEdge(1, 2, 1);
+    g.insertEdge(2, 4, 1);
+    g.insertEdge(1, 4, 3);
+    g.insertEdge(1, 3, 2);
+    g.insertEdge(3, 6, 2);
+    g.insertEdge(3, 5, 0);
+    g.insertEdge(5, 6, 1);
+    g.insertEdge(4, 6, 2);
+    
+
+    // dijkstras algo
+    int src;
+    cout << "Enter src : ";
+    cin >> src;
+
+    int V = g.AdjList.size();
+    vector<int> minDist(V+1, INT_MAX); // nodes are from 1 to V
+    vector<int> nodeToParent(V+1); // node to parent will be used to trace our shortest way back from every node to the src
+    g.dijkstraAlgo(minDist, nodeToParent, src);
+
+    for(int i=1; i < minDist.size(); i++){
+        cout << "min dist from " << src << " to " << i << " is : " << minDist[i] << endl;
+    }
+
+    // lets trace our way back from src to desti 
+    int desti;
+    cout << "Enter destination : ";
+    cin >> desti;
+
+    int parent = nodeToParent[desti];
+    int node = desti;
+    vector<int> shrtstPathSrcToDesti;
+    while(parent != -1) //loop till we reach src
+    {
+        shrtstPathSrcToDesti.push_back(node);
+        //update
+        node = parent;   
+        parent = nodeToParent[node];
+    }
+    shrtstPathSrcToDesti.push_back(node); // including source
+
+    // printing shortest path 
+    reverse(shrtstPathSrcToDesti.begin(), shrtstPathSrcToDesti.end()); // reverse the path 
+
+    cout << "shortest path from " << src << " to " << desti << " is : "; 
+    for(int i=0; i < shrtstPathSrcToDesti.size(); i++){
+        if(i != shrtstPathSrcToDesti.size()-1) //not last index
+            cout << shrtstPathSrcToDesti[i] << " -> ";
+        else cout << shrtstPathSrcToDesti[i] << endl; // last index
+    }
+
+    cout << "-----------------------------------------------" << endl;
+
+}
+
+
+```
+
+
+
+
+
+
