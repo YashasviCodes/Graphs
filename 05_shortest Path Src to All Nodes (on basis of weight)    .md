@@ -2,8 +2,8 @@
 There are 2 Algo to find the shortest path from source to all nodes in graph 
 - 1. Simple Src to All nodes shortest path algo.
 - 2. Dijkstra's ALgo 
-   - Version 1 (to find only shortest path distance)
-   - Version 2 (using Parent Vector to find shortest path from src to desti as well)
+   - Version 1 (to find only shortest path distance from src to all nodes)
+   - Version 2 (using Parent Vector to find shortest path from src to all nodes)
  -------------------------------------------
  note : the above 2 algos we talked about finds the shortest distance on the basis of the weights
  -------------------------------------------
@@ -268,11 +268,11 @@ int main(){
 
 `source : 1, desti : 6` 
 ```
-input :
+I n p u t  :-
+ 
 Enter src : 1
-Enter destination : 6
 
-Output : 
+O u t p u t :- 
 
 min dist from 1 to 1 is : 0
 min dist from 1 to 2 is : 1
@@ -281,7 +281,12 @@ min dist from 1 to 4 is : 2
 min dist from 1 to 5 is : 2
 min dist from 1 to 6 is : 3
 
-shortest path from 1 to 6 is : 1 -> 3 -> 5 -> 6
+shortest path from 1 to 1 is => 1
+shortest path from 1 to 2 is => 1 -> 2
+shortest path from 1 to 3 is => 1 -> 3
+shortest path from 1 to 4 is => 1 -> 2 -> 4
+shortest path from 1 to 5 is => 1 -> 3 -> 5
+shortest path from 1 to 6 is => 1 -> 3 -> 5 -> 6
 ```
 
 Code : 
@@ -375,36 +380,37 @@ int main(){
         cout << "min dist from " << src << " to " << i << " is : " << minDist[i] << endl;
     }
 
-    // lets trace our way back from src to desti 
-    int desti;
-    cout << "Enter destination : ";
-    cin >> desti;
+    // lets trace our way back from src to all nodes (to find min paths to all nodes)
 
-    int parent = nodeToParent[desti];
-    int node = desti;
-    vector<int> shrtstPathSrcToDesti;
-    while(parent != -1) //loop till we reach src
-    {
-        shrtstPathSrcToDesti.push_back(node);
-        //update
-        node = parent;   
-        parent = nodeToParent[node];
+    for(int vertex=1; vertex <= g.AdjList.size(); vertex++){ // vertex start from 1 to n
+        
+        int parent = nodeToParent[vertex]; // finding shortest path from src to all nodes
+        int node = vertex;
+        vector<int> shrtstPathSrcToDesti;
+        while(parent != -1) //loop till we reach src
+        {
+            shrtstPathSrcToDesti.push_back(node);
+            //update
+            node = parent;   
+            parent = nodeToParent[node];
+        }
+        shrtstPathSrcToDesti.push_back(node); // including source
+
+        // printing shortest path 
+        reverse(shrtstPathSrcToDesti.begin(), shrtstPathSrcToDesti.end()); // reverse the path 
+
+        cout << "shortest path from " << src << " to " << vertex << " is => "; 
+        for(int i=0; i < shrtstPathSrcToDesti.size(); i++){
+            if(i != shrtstPathSrcToDesti.size()-1) //not last index
+                cout << shrtstPathSrcToDesti[i] << " -> ";
+            else cout << shrtstPathSrcToDesti[i] << endl; // last index
+        }
+
     }
-    shrtstPathSrcToDesti.push_back(node); // including source
-
-    // printing shortest path 
-    reverse(shrtstPathSrcToDesti.begin(), shrtstPathSrcToDesti.end()); // reverse the path 
-
-    cout << "shortest path from " << src << " to " << desti << " is : "; 
-    for(int i=0; i < shrtstPathSrcToDesti.size(); i++){
-        if(i != shrtstPathSrcToDesti.size()-1) //not last index
-            cout << shrtstPathSrcToDesti[i] << " -> ";
-        else cout << shrtstPathSrcToDesti[i] << endl; // last index
-    }
-
     cout << "-----------------------------------------------" << endl;
 
 }
+
 
 
 ```
