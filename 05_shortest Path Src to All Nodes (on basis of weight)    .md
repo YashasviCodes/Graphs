@@ -4,10 +4,10 @@ There are 2 Algo to find the shortest path from source to all nodes in graph
 - 2. Dijkstra's ALgo 
    - Version 1 (to find only shortest path distance from src to all nodes)
    - Version 2 (using Parent Vector to find shortest path from src to all nodes)
- -------------------------------------------
- note : the above 2 algos we talked about finds the shortest distance on the basis of the weights
- -------------------------------------------
  
+`
+note : the above 2 algos we talked about finds the shortest distance on the basis of the weights
+`
 Time/Space for both Algos is mostly same :- 
 Time : $O(E + V)$
 Space : $O(E + V)$ 
