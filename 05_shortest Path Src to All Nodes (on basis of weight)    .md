@@ -147,10 +147,25 @@ int main(){
 
 ![graph (3)](https://github.com/yashasviyadav1/Graphs/assets/124666305/9d340e9e-2381-4563-996f-f3f7ef2472ef)
 
+### (Version-1) Finding shortest distance from src to all nodes 
+
 `Source : 1`
 `desti : 6`
 
-### (Version-1) Finding shortest distance from src to all nodes 
+```
+Input : 
+Enter src : 1
+
+Output : 
+
+min dist from 1 to 1 is : 0
+min dist from 1 to 2 is : 1
+min dist from 1 to 3 is : 2
+min dist from 1 to 4 is : 3
+min dist from 1 to 5 is : 2
+min dist from 1 to 6 is : 2
+```
+
 ```cpp
 #include<iostream>
 #include<unordered_map>
