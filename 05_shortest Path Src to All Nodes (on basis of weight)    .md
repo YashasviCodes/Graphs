@@ -5,6 +5,7 @@ There are 2 Algo to find the shortest path from source to all nodes in graph
    - Version 1 (to find only shortest path distance)
    - Version 2 (using Parent Vector to find shortest path from src to desti as well)
  -------------------------------------------
+ note : the above 2 algos we talked about finds the shortest distance on the basis of the weights
  -------------------------------------------
  
 ## Shortest Path Source to All Nodes (Algo) 
