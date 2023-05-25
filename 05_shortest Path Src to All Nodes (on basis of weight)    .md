@@ -8,6 +8,10 @@ There are 2 Algo to find the shortest path from source to all nodes in graph
  note : the above 2 algos we talked about finds the shortest distance on the basis of the weights
  -------------------------------------------
  
+Time/Space for both Algos is mostly same :- 
+Time : $O(E + V)$
+Space : $O(E + V)$ 
+
 ## Shortest Path Source to All Nodes (Algo) 
 
 idea : in this we apply the BFS on topological sort to with `minDist` array to store min dist from source to other node 
